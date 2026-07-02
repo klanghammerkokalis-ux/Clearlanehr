@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clearlane HR — Leave of Absence &amp; Fractional HR Consulting</title>
+<meta name="description" content="Fractional HR and leave-of-absence compliance consulting for growing employers. FMLA, ADA, and multi-state leave, translated into plain language and built to run without you.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  :root{
+    --navy:#0f2033;
+    --navy-mid:#173657;
+    --teal:#2c6b60;
+    --teal-bright:#3f9c86;
+    --sand:#f4efe4;
+    --paper:#fbfaf6;
+    --ink:#122135;
+    --ink-soft:#4c5c6e;
+    --ink-faint:#8695a3;
+    --line:#dbe1d9;
+    --line-strong:#c3cdc4;
+    --white:#ffffff;
+  }
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Inter',sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.6;
+    font-size:16px;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.serif{font-family:'Fraunces',serif;}
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  a{color:inherit;text-decoration:none;}
+  img{max-width:100%;display:block;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 6vw;}
+  section{position:relative;}
+
+  /* ===== NAV ===== */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:200;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0 6vw;height:74px;
+    background:rgba(251,250,246,0.92);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid transparent;
+    transition:border-color .3s, box-shadow .3s;
+  }
+  nav.scrolled{border-color:var(--line);box-shadow:0 2px 24px rgba(15,32,51,.06);}
+  .logo{display:flex;align-items:center;gap:10px;}
+  .logo-mark{width:34px;height:34px;flex-shrink:0;}
+  .logo-word{font-family:'Fraunces',serif;font-weight:500;font-size:19px;color:var(--navy);letter-spacing:-0.01em;}
+  .logo-word em{font-style:normal;color:var(--teal);}
+  .logo-sub{font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--ink-faint);letter-spacing:.12em;text-transform:uppercase;margin-top:1px;}
+  .nav-links{display:flex;align-items:center;gap:36px;}
+  .nav-links a{font-size:14px;font-weight:500;color:var(--ink-soft);transition:color .2s;}
+  .nav-links a:hover{color:var(--teal);}
+  .nav-cta{
+    background:var(--navy);color:var(--white)!important;
+    padding:10px 20px;border-radius:3px;font-size:13.5px;font-weight:600;
+    transition:background .2s;
+  }
+  .nav-cta:hover{background:var(--teal);}
+  .nav-toggle{display:none;background:none;border:none;cursor:pointer;color:var(--navy);}
+
+  /* ===== LANE MOTIF (signature element) ===== */
+  /* thin parallel guide-lines that run through section dividers, referencing the brand name */
+  .lanes{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0;}
+  .lanes svg{position:absolute;top:0;left:0;width:100%;height:100%;}
+  .lane-divider{width:100%;height:64px;position:relative;overflow:hidden;}
+  .lane-divider svg{width:100%;height:100%;display:block;}
+
+  /* ===== HERO ===== */
+  .hero{
+    padding:172px 0 108px;
+    background:var(--navy);
+    color:var(--sand);
+    position:relative;
+    overflow:hidden;
+  }
+  .hero .wrap{position:relative;z-index:2;display:grid;grid-template-columns:1.15fr .85fr;gap:64px;align-items:center;}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:10px;
+    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--teal-bright);margin-bottom:26px;
+  }
+  .eyebrow::before{content:'';width:22px;height:1px;background:var(--teal-bright);}
+  .hero h1{
+    font-size:clamp(38px,4.6vw,62px);
+    font-weight:500;line-height:1.06;letter-spacing:-0.015em;
+    color:var(--white);margin-bottom:26px;
+  }
+  .hero h1 em{font-family:'Inter',sans-serif;font-style:normal;font-weight:600;color:var(--teal-bright);letter-spacing:-0.01em;}
+  .hero p.lead{font-size:18px;color:#c3ceda;max-width:490px;margin-bottom:38px;}
+  .btn-row{display:flex;gap:14px;flex-wrap:wrap;}
+  .btn{
+    display:inline-flex;align-items:center;gap:9px;
+    padding:14px 26px;border-radius:3px;font-size:14.5px;font-weight:600;
+    transition:transform .15s ease, background .2s, border-color .2s;
+    border:1px solid transparent;
+  }
+  .btn:hover{transform:translateY(-1px);}
+  .btn-primary{background:var(--teal-bright);color:var(--navy);}
+  .btn-primary:hover{background:#4fb39c;}
+  .btn-ghost{border-color:rgba(255,255,255,.28);color:var(--white);}
+  .btn-ghost:hover{border-color:var(--teal-bright);color:var(--teal-bright);}
+
+  .hero-panel{
+    position:relative;background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.14);border-radius:6px;
+    padding:30px 28px;
+  }
+  .hero-panel .mono{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--teal-bright);margin-bottom:16px;display:block;}
+  .credential-row{display:flex;justify-content:space-between;align-items:baseline;padding:13px 0;border-bottom:1px solid rgba(255,255,255,.1);}
+  .credential-row:last-child{border-bottom:none;}
+  .credential-row span:first-child{font-size:13.5px;color:#a9b7c6;}
+  .credential-row span:last-child{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--white);}
+
+  /* ===== TRUST STRIP ===== */
+  .trust{background:var(--sand);padding:22px 0;border-bottom:1px solid var(--line);}
+  .trust .wrap{display:flex;flex-wrap:wrap;gap:34px;justify-content:center;align-items:center;}
+  .trust span{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-soft);letter-spacing:.03em;}
+  .trust span b{color:var(--navy);}
+
+  /* ===== SECTION HEADERS ===== */
+  .section-head{max-width:640px;margin-bottom:56px;}
+  .section-head .eyebrow{color:var(--teal);}
+  .section-head .eyebrow::before{background:var(--teal);}
+  .section-head h2{font-size:clamp(28px,3.2vw,40px);font-weight:500;letter-spacing:-0.01em;color:var(--navy);line-height:1.15;}
+  .section-head p{color:var(--ink-soft);margin-top:16px;font-size:16px;max-width:560px;}
+
+  /* ===== SERVICES ("lanes") ===== */
+  .services{padding:110px 0 100px;background:var(--paper);}
+  .lane-list{border-top:1px solid var(--line-strong);}
+  .lane-item{
+    display:grid;grid-template-columns:150px 1fr 1fr;gap:32px;
+    padding:34px 0;border-bottom:1px solid var(--line-strong);
+    align-items:start;
+  }
+  .lane-tag{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--teal);letter-spacing:.04em;padding-top:4px;}
+  .lane-item h3{font-size:21px;font-weight:500;color:var(--navy);margin-bottom:10px;letter-spacing:-0.005em;}
+  .lane-item p{color:var(--ink-soft);font-size:15px;}
+
+  /* ===== DIFFERENTIATOR BAND ===== */
+  .differentiator{background:var(--navy-mid);color:var(--sand);padding:86px 0;position:relative;overflow:hidden;}
+  .differentiator .wrap{display:grid;grid-template-columns:.9fr 1.1fr;gap:60px;align-items:center;position:relative;z-index:2;}
+  .differentiator blockquote{font-family:'Fraunces',serif;font-style:italic;font-size:clamp(22px,2.6vw,30px);line-height:1.35;color:var(--white);font-weight:500;}
+  .differentiator .attr{margin-top:22px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--teal-bright);letter-spacing:.04em;}
+  .diff-points{display:flex;flex-direction:column;gap:22px;}
+  .diff-point{display:flex;gap:16px;align-items:flex-start;}
+  .diff-point .num{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--teal-bright);padding-top:3px;min-width:20px;}
+  .diff-point p{font-size:15px;color:#c3ceda;}
+  .diff-point strong{color:var(--white);display:block;margin-bottom:3px;font-weight:600;}
+
+  /* ===== PRODUCTS ===== */
+  .products{padding:110px 0 100px;background:var(--sand);}
+  .product-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+  .product-card{
+    background:var(--paper);border:1px solid var(--line-strong);border-radius:6px;
+    padding:32px 26px;display:flex;flex-direction:column;
+    transition:border-color .2s, transform .2s;
+  }
+  .product-card:hover{border-color:var(--teal);transform:translateY(-3px);}
+  .product-card.featured{background:var(--navy);border-color:var(--navy);color:var(--sand);}
+  .product-card .ptag{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--teal);margin-bottom:16px;}
+  .product-card.featured .ptag{color:var(--teal-bright);}
+  .product-card h3{font-size:20px;font-weight:500;margin-bottom:12px;color:var(--navy);}
+  .product-card.featured h3{color:var(--white);}
+  .product-card p{font-size:14.5px;color:var(--ink-soft);margin-bottom:22px;flex-grow:1;}
+  .product-card.featured p{color:#b9c6d4;}
+  .price-row{display:flex;justify-content:space-between;align-items:center;padding-top:18px;border-top:1px solid var(--line);margin-top:auto;}
+  .product-card.featured .price-row{border-top-color:rgba(255,255,255,.15);}
+  .price{font-family:'IBM Plex Mono',monospace;font-size:17px;color:var(--navy);font-weight:500;}
+  .product-card.featured .price{color:var(--white);}
+  .price-link{font-size:13px;font-weight:600;color:var(--teal);}
+  .product-card.featured .price-link{color:var(--teal-bright);}
+
+  /* ===== IL COMPLIANCE TIMELINE ===== */
+  .compliance{padding:110px 0 100px;background:var(--paper);}
+  .timeline{position:relative;padding-left:28px;border-left:1.5px solid var(--line-strong);}
+  .t-item{position:relative;padding-bottom:44px;}
+  .t-item:last-child{padding-bottom:0;}
+  .t-item::before{
+    content:'';position:absolute;left:-33.5px;top:3px;width:10px;height:10px;border-radius:50%;
+    background:var(--paper);border:2px solid var(--teal);
+  }
+  .t-date{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--teal);letter-spacing:.04em;margin-bottom:8px;display:block;}
+  .t-item h4{font-size:18px;font-weight:500;color:var(--navy);margin-bottom:8px;}
+  .t-item p{font-size:14.5px;color:var(--ink-soft);max-width:600px;}
+
+  /* ===== ABOUT ===== */
+  .about{padding:110px 0 120px;background:var(--sand);}
+  .about .wrap{display:grid;grid-template-columns:.85fr 1.15fr;gap:64px;align-items:start;}
+  .about-card{
+    background:var(--navy);color:var(--sand);border-radius:6px;padding:34px 28px;
+  }
+  .about-card .initials{
+    width:52px;height:52px;border-radius:50%;background:var(--teal-bright);color:var(--navy);
+    display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:600;font-size:19px;margin-bottom:18px;
+  }
+  .about-card h4{font-family:'Fraunces',serif;font-size:21px;font-weight:500;color:var(--white);margin-bottom:3px;}
+  .about-card .role{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--teal-bright);letter-spacing:.04em;margin-bottom:20px;}
+  .cred-list{display:flex;flex-direction:column;gap:9px;}
+  .cred-list span{font-size:13.5px;color:#b9c6d4;display:flex;gap:8px;}
+  .cred-list span::before{content:'—';color:var(--teal-bright);}
+  .about-text h2{font-size:clamp(26px,3vw,36px);font-weight:500;color:var(--navy);letter-spacing:-0.01em;margin-bottom:22px;line-height:1.2;}
+  .about-text p{color:var(--ink-soft);font-size:16px;margin-bottom:18px;}
+  .about-text p strong{color:var(--navy);font-weight:600;}
+
+  /* ===== CTA ===== */
+  .cta-band{background:var(--navy);color:var(--sand);padding:96px 0;text-align:center;position:relative;overflow:hidden;}
+  .cta-band .wrap{position:relative;z-index:2;}
+  .cta-band h2{font-size:clamp(28px,3.6vw,44px);font-weight:500;color:var(--white);letter-spacing:-0.01em;margin-bottom:20px;}
+  .cta-band p{color:#b9c6d4;font-size:16px;max-width:480px;margin:0 auto 34px;}
+  .cta-band .btn-row{justify-content:center;}
+
+  /* ===== FOOTER ===== */
+  footer{background:var(--navy);border-top:1px solid rgba(255,255,255,.1);padding:44px 0 32px;}
+  footer .wrap{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:24px;}
+  .footer-brand .logo-word{color:var(--white);}
+  .footer-brand p{color:#8695a3;font-size:12.5px;margin-top:10px;max-width:280px;line-height:1.7;}
+  .footer-links{display:flex;gap:48px;flex-wrap:wrap;}
+  .footer-col h5{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--teal-bright);margin-bottom:14px;}
+  .footer-col a, .footer-col span{display:block;font-size:13.5px;color:#b9c6d4;margin-bottom:9px;}
+  .footer-col a:hover{color:var(--white);}
+  .footer-bottom{margin-top:40px;padding-top:22px;border-top:1px solid rgba(255,255,255,.08);font-size:12px;color:#6d7d8d;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width:880px){
+    .nav-links{display:none;}
+    .nav-toggle{display:block;}
+    .hero .wrap{grid-template-columns:1fr;}
+    .hero-panel{order:-1;}
+    .differentiator .wrap{grid-template-columns:1fr;}
+    .about .wrap{grid-template-columns:1fr;}
+    .product-grid{grid-template-columns:1fr;}
+    .lane-item{grid-template-columns:1fr;gap:8px;}
+    .lane-tag{padding-top:0;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto;}
+    .btn,.product-card{transition:none;}
+  }
+
+  :focus-visible{outline:2px solid var(--teal-bright);outline-offset:2px;}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <a href="#top" class="logo">
+    <svg class="logo-mark" viewBox="0 0 34 34" fill="none">
+      <rect width="34" height="34" rx="7" fill="#0f2033"/>
+      <path d="M6 21 L14 13 L20 19 L28 11" stroke="#3f9c86" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <path d="M6 25 L28 25" stroke="#3f9c86" stroke-width="2.2" stroke-linecap="round" opacity="0.55"/>
+    </svg>
+    <div>
+      <div class="logo-word">Clear<em>lane</em> HR</div>
+      <div class="logo-sub">Leave &amp; HR Consulting</div>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a href="#services">Services</a>
+    <a href="#products">Digital Products</a>
+    <a href="#compliance">2026 Compliance</a>
+    <a href="#about">About</a>
+    <a href="#contact" class="nav-cta">Book a Consult</a>
+  </div>
+  <button class="nav-toggle" aria-label="Menu">
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M3 6h16M3 11h16M3 16h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+  </button>
+</nav>
+
+<section class="hero" id="top">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">Fractional HR &amp; Leave Compliance</div>
+      <h1>Every leave request has a right answer. <em>We find it before it becomes a problem.</em></h1>
+      <p class="lead">Clearlane HR designs and runs leave-of-absence programs for growing employers — FMLA, ADA, and state paid leave, built into policy your managers can actually follow, without adding headcount.</p>
+      <div class="btn-row">
+        <a href="#contact" class="btn btn-primary">Book a free 30-minute consult</a>
+        <a href="#products" class="btn btn-ghost">See the LOA Policy Generator</a>
+      </div>
+    </div>
+    <div class="hero-panel">
+      <span class="mono">Founder credentials</span>
+      <div class="credential-row"><span>Certification</span><span>SHRM-CP · PMP</span></div>
+      <div class="credential-row"><span>LOA program scale</span><span>8,500+ employees, 50 states</span></div>
+      <div class="credential-row"><span>Background</span><span>Former classroom teacher</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="trust">
+  <div class="wrap">
+    <span>Prior LOA program built for <b>8,500+ employees</b></span>
+    <span><b>All 50 states</b> — playbook adopted org-wide</span>
+    <span>Serving employers sized <b>250–2,500</b></span>
+    <span>Healthcare · Insurance · Manufacturing · Nonprofit</span>
+  </div>
+</div>
+
+<section class="services" id="services">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">What we do</div>
+      <h2>HR expertise, on the lanes you're missing</h2>
+      <p>Most mid-size companies don't need a full HR department — they need the two or three things a full department would already have covered. Clearlane HR fills those specific lanes.</p>
+    </div>
+    <div class="lane-list">
+      <div class="lane-item">
+        <div class="lane-tag">FMLA · ADA</div>
+        <h3>Leave-of-Absence Program Design</h3>
+        <p>End-to-end LOA program build: eligibility rules, notice timelines, intermittent-leave tracking, and return-to-work workflows, documented so any HR generalist can run them without escalating every case.</p>
+      </div>
+      <div class="lane-item">
+        <div class="lane-tag">50-State Playbook</div>
+        <h3>Multi-State Compliance</h3>
+        <p>State paid-leave laws don't wait for your handbook refresh. We monitor and translate multi-jurisdiction leave requirements into a single policy framework that scales as you open new states.</p>
+      </div>
+      <div class="lane-item">
+        <div class="lane-tag">On-Demand</div>
+        <h3>Fractional HR Partnership</h3>
+        <p>Ongoing HR support priced like a subscription, not a headcount line — policy review, employee relations guidance, and compliance audits on a cadence that fits your company's size.</p>
+      </div>
+      <div class="lane-item">
+        <div class="lane-tag">Manager-Ready</div>
+        <h3>Manager Training &amp; Scripts</h3>
+        <p>Word-for-word conversation scripts and a do-not-say reference for the moments managers get nervous — leave requests, accommodation conversations, return-to-work check-ins.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="differentiator">
+  <div class="lanes" aria-hidden="true">
+    <svg viewBox="0 0 1200 400" preserveAspectRatio="none">
+      <path d="M-50 420 C 300 320, 500 380, 1250 60" stroke="#3f9c86" stroke-width="1" fill="none" opacity="0.18"/>
+      <path d="M-50 460 C 320 360, 520 420, 1250 100" stroke="#3f9c86" stroke-width="1" fill="none" opacity="0.14"/>
+      <path d="M-50 500 C 340 400, 540 460, 1250 140" stroke="#3f9c86" stroke-width="1" fill="none" opacity="0.10"/>
+    </svg>
+  </div>
+  <div class="wrap">
+    <div>
+      <blockquote>"I spent years translating federal leave law into the exact sentence a floor manager needed to hear. That's still the job — the audience just changed."</blockquote>
+      <div class="attr">— Kristin Kokalis, Founder, SHRM-CP · PMP</div>
+    </div>
+    <div class="diff-points">
+      <div class="diff-point">
+        <div class="num">01</div>
+        <p><strong>Built by a former teacher.</strong> Policy language gets rewritten until a non-HR manager can follow it on the first read — no compliance jargon left for someone else to translate later.</p>
+      </div>
+      <div class="diff-point">
+        <div class="num">02</div>
+        <p><strong>Tested at scale, not theory.</strong> Every framework was run against a real 8,500-employee, 50-state leave program before it became a template.</p>
+      </div>
+      <div class="diff-point">
+        <div class="num">03</div>
+        <p><strong>Project-managed delivery.</strong> PMP-certified execution means engagements ship on a defined timeline, not an open-ended retainer.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="products" id="products">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Digital products</div>
+      <h2>Don't need a consultant yet? Start here.</h2>
+      <p>Self-serve tools for companies that need a compliant leave policy now and a full engagement later — or never.</p>
+    </div>
+    <div class="product-grid">
+      <div class="product-card featured">
+        <div class="ptag">Instant · State-specific</div>
+        <h3>LOA Policy Generator</h3>
+        <p>Answer a few questions about your company — state, size, leave types offered — and get a complete, compliance-ready leave policy document in minutes, citing FMLA, ADA, USERRA, and your state's paid-leave law.</p>
+        <div class="price-row"><span class="price">$47</span><a href="#contact" class="price-link">Get started →</a></div>
+      </div>
+      <div class="product-card">
+        <div class="ptag">Digital bundle</div>
+        <h3>LOA Administration Toolkit</h3>
+        <p>The templates HR teams reach for every week: leave request forms, designation letters, return-to-work checklists, and an intermittent-leave tracker, ready to brand and deploy.</p>
+        <div class="price-row"><span class="price">$197</span><a href="#contact" class="price-link">View contents →</a></div>
+      </div>
+      <div class="product-card">
+        <div class="ptag">Licensed tool</div>
+        <h3>Command Center Dashboard</h3>
+        <p>A lightweight internal dashboard for tracking open leave cases, upcoming return dates, and compliance deadlines across every state you operate in — no new HRIS required.</p>
+        <div class="price-row"><span class="price">$997/yr</span><a href="#contact" class="price-link">Request a demo →</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="compliance" id="compliance">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Illinois, 2026</div>
+      <h2>What's changing under Illinois employers this year</h2>
+      <p>A running list of the Illinois leave and workplace law changes we're tracking for clients. If your policy hasn't been updated for these, it's out of date.</p>
+    </div>
+    <div class="timeline">
+      <div class="t-item">
+        <span class="t-date">Effective June 1, 2026</span>
+        <h4>NICU Leave</h4>
+        <p>New parental leave protections for employees whose newborn requires neonatal intensive care, running alongside existing FMLA and Illinois parental leave entitlements.</p>
+      </div>
+      <div class="t-item">
+        <span class="t-date">In effect</span>
+        <h4>Nursing Mothers in the Workplace Act (Paid Break Time)</h4>
+        <p>Illinois requires paid, reasonable break time for lactation, with narrower undue-hardship exceptions than the federal PUMP Act — a common gap in employer handbooks.</p>
+      </div>
+      <div class="t-item">
+        <span class="t-date">In effect</span>
+        <h4>Illinois AI Hiring &amp; Employment Rules</h4>
+        <p>New disclosure and non-discrimination requirements for employers using AI in hiring, promotion, and — relevant to leave administration — automated accommodation or return-to-work decisions.</p>
+      </div>
+      <div class="t-item">
+        <span class="t-date">Ongoing</span>
+        <h4>Illinois Paid Leave for All Workers Act</h4>
+        <p>Still the most misapplied law we see: 40 hours of paid leave for any reason, accrual rules, and interaction with existing PTO policies that were never rewritten to comply.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="about" id="about">
+  <div class="wrap">
+    <div class="about-card">
+      <div class="initials">KK</div>
+      <h4>Kristin Kokalis</h4>
+      <div class="role">Founder &amp; Principal Consultant</div>
+      <div class="cred-list">
+        <span>SHRM-CP, Society for Human Resource Management</span>
+        <span>PMP, Project Management Institute</span>
+        <span>BA Psychology, University of Iowa</span>
+        <span>Former classroom teacher</span>
+        <span>8+ years in leave &amp; benefits administration</span>
+      </div>
+    </div>
+    <div class="about-text">
+      <h2>Compliance work is a translation problem before it's a legal one.</h2>
+      <p>Before HR, Kristin spent years in the classroom — which turns out to be the best possible training for compliance work. <strong>The hardest part of leave administration was never the law itself. It was getting a busy floor manager to apply it correctly under pressure, without a lawyer in the room.</strong></p>
+      <p>That's the lens Clearlane HR builds from: leave-of-absence programs, policy documents, and manager scripts that hold up under real conditions, not just in a handbook. Every framework was developed and tested managing FMLA, ADA, and multi-state leave for an organization of more than 8,500 employees across all 50 states, then rebuilt for companies without that infrastructure already in place.</p>
+      <p>Clearlane HR works with employers directly, or alongside existing HR teams as a fractional partner, on the specific leave and compliance lanes that keep getting deprioritized until they can't be.</p>
+    </div>
+  </div>
+</section>
+
+<section class="cta-band" id="contact">
+  <div class="lanes" aria-hidden="true">
+    <svg viewBox="0 0 1200 400" preserveAspectRatio="none">
+      <path d="M-50 40 C 300 140, 500 80, 1250 360" stroke="#3f9c86" stroke-width="1" fill="none" opacity="0.16"/>
+      <path d="M-50 0 C 320 100, 520 40, 1250 320" stroke="#3f9c86" stroke-width="1" fill="none" opacity="0.12"/>
+    </svg>
+  </div>
+  <div class="wrap">
+    <h2>Let's find your compliance gaps before your auditor does.</h2>
+    <p>A free 30-minute consult covers where your current leave policy is exposed, and whether a fractional engagement or a self-serve tool is the right next step.</p>
+    <div class="btn-row">
+      <a href="https://calendly.com/k-langhammer-kokalis/30min" target="_blank" rel="noopener" class="btn btn-primary">Book on Calendly</a>
+      <a href="tel:6304921254" class="btn btn-ghost">Call (630) 492-1254</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-brand">
+      <div class="logo-word">Clear<em style="color:#3f9c86;font-style:normal;">lane</em> HR</div>
+      <p>Fractional HR and leave-of-absence compliance consulting for growing employers.</p>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <h5>Services</h5>
+        <a href="#services">LOA Program Design</a>
+        <a href="#services">Multi-State Compliance</a>
+        <a href="#services">Fractional HR</a>
+        <a href="#services">Manager Training</a>
+      </div>
+      <div class="footer-col">
+        <h5>Products</h5>
+        <a href="#products">Policy Generator</a>
+        <a href="#products">Admin Toolkit</a>
+        <a href="#products">Command Center</a>
+      </div>
+      <div class="footer-col">
+        <h5>Contact</h5>
+        <span>(630) 492-1254</span>
+        <a href="https://calendly.com/k-langhammer-kokalis/30min" target="_blank" rel="noopener">Book a consult</a>
+      </div>
+    </div>
+  </div>
+  <div class="wrap footer-bottom">
+    <span>© 2026 Clearlane HR. All rights reserved.</span>
+  </div>
+</footer>
+
+<script>
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 12);
+  });
+  document.querySelector('.nav-toggle').addEventListener('click', () => {
+    const links = document.querySelector('.nav-links');
+    const open = links.style.display === 'flex';
+    links.style.display = open ? 'none' : 'flex';
+    if(!open){
+      links.style.cssText = 'display:flex;position:fixed;top:74px;left:0;right:0;background:#fbfaf6;flex-direction:column;padding:20px 6vw;gap:18px;border-bottom:1px solid #dbe1d9;';
+    }
+  });
+</script>
+
+</body>
+</html>
