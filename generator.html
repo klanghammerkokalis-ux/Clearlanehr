@@ -30,14 +30,17 @@
   .card{background:var(--white);border:1px solid var(--line-strong);border-radius:8px;padding:34px;margin-bottom:24px;}
   .field{margin-bottom:22px;}
   label{display:block;font-size:13.5px;font-weight:600;color:var(--navy);margin-bottom:8px;}
-  input[type=text], select{
+  input[type=text], input[type=email], select{
     width:100%;padding:12px 14px;border:1px solid var(--line-strong);border-radius:4px;
     font-family:'Inter',sans-serif;font-size:14.5px;color:var(--ink);background:var(--paper);
   }
-  input[type=text]:focus, select:focus{outline:2px solid var(--teal-bright);outline-offset:1px;border-color:var(--teal);}
+  input:focus, select:focus{outline:2px solid var(--teal-bright);outline-offset:1px;border-color:var(--teal);}
   .checks{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
   .check-item{display:flex;align-items:center;gap:9px;font-size:14px;color:var(--ink);}
   .check-item input{width:16px;height:16px;accent-color:var(--teal);}
+  #state-checks{grid-template-columns:1fr 1fr 1fr;max-height:280px;overflow-y:auto;padding:14px;border:1px solid var(--line-strong);border-radius:6px;background:var(--paper);gap:8px 14px;}
+  #state-count{font-size:12.5px;color:var(--ink-soft);margin-top:10px;}
+  #state-count.over span{color:var(--teal);font-weight:600;}
 
   .btn{
     display:inline-flex;align-items:center;justify-content:center;gap:9px;width:100%;
@@ -46,24 +49,30 @@
   }
   .btn:hover:not(:disabled){background:var(--teal);}
   .btn:disabled{opacity:.55;cursor:not-allowed;}
+  .btn-secondary{background:var(--paper);border:1px solid var(--line-strong);color:var(--navy);}
+  .btn-secondary:hover:not(:disabled){background:var(--sand);}
 
   .notice{padding:16px 18px;border-radius:6px;font-size:14px;margin-bottom:24px;}
   .notice.warn{background:#fbeeed;border:1px solid #e3b8b3;color:var(--red);}
   .notice.info{background:var(--sand);border:1px solid var(--line-strong);color:var(--ink-soft);}
 
-  #result{display:none;}
-  #result.show{display:block;}
+  #doc-result{display:none;}
+  #doc-result.show{display:block;}
   .doc-panel{background:var(--white);border:1px solid var(--line-strong);border-radius:8px;padding:36px;white-space:pre-wrap;font-size:14.5px;line-height:1.7;color:var(--ink);max-height:70vh;overflow-y:auto;}
   .doc-actions{display:flex;gap:12px;margin-top:18px;}
-  .btn-secondary{background:var(--paper);border:1px solid var(--line-strong);color:var(--navy);}
-  .btn-secondary:hover:not(:disabled){background:var(--sand);}
 
   .spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.4);border-top-color:var(--white);border-radius:50%;animation:spin .7s linear infinite;}
   @keyframes spin{to{transform:rotate(360deg);}}
 
+  #success-panel{display:none;text-align:center;padding:50px 20px;}
+  #success-panel.show{display:block;}
+  #success-panel .check{width:56px;height:56px;border-radius:50%;background:var(--teal-bright);color:var(--white);display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 22px;}
+  #success-panel h2{color:var(--navy);margin-bottom:12px;font-size:24px;}
+  #success-panel p{color:var(--ink-soft);max-width:440px;margin:0 auto;}
+
   @media print{
     header,.card,.notice,.doc-actions,footer{display:none !important;}
-    #result{display:block !important;}
+    #doc-result{display:block !important;}
     .doc-panel{border:none;max-height:none;padding:0;}
   }
 </style>
@@ -81,37 +90,85 @@
   <div class="wrap">
     <div class="eyebrow">Step 2 of 2</div>
     <h1>Generate your leave-of-absence policy</h1>
-    <p class="sub">Fill in your company details below. It takes about a minute to generate a complete, citation-backed policy document tailored to your state.</p>
+    <p class="sub">Select 5 states or fewer and we'll generate your policy instantly. Selecting more than 5 states switches this into a request — we'll hand-build and review a policy that broad before sending it to you.</p>
 
     <div id="gate-notice"></div>
 
-    <form class="card" id="policy-form" style="display:none;">
+    <form class="card" id="policy-form" name="policy-request" method="POST" data-netlify="true" style="display:none;">
+      <input type="hidden" name="form-name" value="policy-request">
+      <input type="hidden" name="session_id" id="session_id_field">
+
+      <div class="field">
+        <label for="contactEmail">Your email</label>
+        <input type="email" id="contactEmail" name="contactEmail" required placeholder="you@company.com">
+      </div>
       <div class="field">
         <label for="companyName">Company name</label>
-        <input type="text" id="companyName" required placeholder="e.g. Riverside Manufacturing Co.">
+        <input type="text" id="companyName" name="companyName" required placeholder="e.g. Riverside Manufacturing Co.">
       </div>
+
       <div class="field">
-        <label for="state">Primary state of operation</label>
-        <select id="state" required>
-          <option value="">Select a state</option>
-          <option>Alabama</option><option>Alaska</option><option>Arizona</option><option>Arkansas</option>
-          <option>California</option><option>Colorado</option><option>Connecticut</option><option>Delaware</option>
-          <option>Florida</option><option>Georgia</option><option>Hawaii</option><option>Idaho</option>
-          <option>Illinois</option><option>Indiana</option><option>Iowa</option><option>Kansas</option>
-          <option>Kentucky</option><option>Louisiana</option><option>Maine</option><option>Maryland</option>
-          <option>Massachusetts</option><option>Michigan</option><option>Minnesota</option><option>Mississippi</option>
-          <option>Missouri</option><option>Montana</option><option>Nebraska</option><option>Nevada</option>
-          <option>New Hampshire</option><option>New Jersey</option><option>New Mexico</option><option>New York</option>
-          <option>North Carolina</option><option>North Dakota</option><option>Ohio</option><option>Oklahoma</option>
-          <option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option><option>South Carolina</option>
-          <option>South Dakota</option><option>Tennessee</option><option>Texas</option><option>Utah</option>
-          <option>Vermont</option><option>Virginia</option><option>Washington</option><option>West Virginia</option>
-          <option>Wisconsin</option><option>Wyoming</option><option>District of Columbia</option>
-        </select>
+        <label>States where you have employees residing</label>
+        <p style="font-size:13px;color:var(--ink-soft);margin-bottom:12px;">Check every state you have even one employee living in — even a single employee in a state like California can trigger additional requirements.</p>
+        <div class="checks" id="state-checks">
+          <div class="check-item"><input type="checkbox" name="states" value="Alabama"> Alabama</div>
+          <div class="check-item"><input type="checkbox" name="states" value="Alaska"> Alaska</div>
+          <div class="check-item"><input type="checkbox" name="states" value="Arizona"> Arizona</div>
+          <div class="check-item"><input type="checkbox" name="states" value="Arkansas"> Arkansas</div>
+          <div class="check-item"><input type="checkbox" name="states" value="California"> California</div>
+          <div class="check-item"><input type="checkbox" name="states" value="Colorado"> Colorado</div>
+          <div class="check-item"><input type="checkbox" name="states" value="Connecticut"> Connecticut</div>
+          <div class="check-item"><input type="checkbox" name="states" value="Delaware"> Delaware</div>
+          <div class="check-item"><input type="checkbox" name="states" value="Florida"> Florida</div>
+          <div class="check-item"><input type="checkbox" name="states" value="Georgia"> Georgia</div>
+          <div class="check-item"><input type="checkbox" name="states" value="Hawaii"> Hawaii</div>
+          <div class="check-item"><input type="checkbox" name="states" value="Idaho"> Idaho</div>
+          <div class="check-item"><input type="checkbox" name="states" value="Illinois"> Illinois</div>
+          <div class="check-item"><input type="checkbox" name="states" value="Indiana"> Indiana</div>
+          <div class="check-item"><input type="checkbox" name="states" value="Iowa"> Iowa</div>
+          <div class="check-item"><input type="checkbox" name="states" value="Kansas"> Kansas</div>
+          <div class="check-item"><input type="checkbox" name="states" value="Kentucky"> Kentucky</div>
+          <div class="check-item"><input type="checkbox" name="states" value="Louisiana"> Louisiana</div>
+          <div class="check-item"><input type="checkbox" name="states" value="Maine"> Maine</div>
+          <div class="check-item"><input type="checkbox" name="states" value="Maryland"> Maryland</div>
+          <div class="check-item"><input type="checkbox" name="states" value="Massachusetts"> Massachusetts</div>
+          <div class="check-item"><input type="checkbox" name="states" value="Michigan"> Michigan</div>
+          <div class="check-item"><input type="checkbox" name="states" value="Minnesota"> Minnesota</div>
+          <div class="check-item"><input type="checkbox" name="states" value="Mississippi"> Mississippi</div>
+          <div class="check-item"><input type="checkbox" name="states" value="Missouri"> Missouri</div>
+          <div class="check-item"><input type="checkbox" name="states" value="Montana"> Montana</div>
+          <div class="check-item"><input type="checkbox" name="states" value="Nebraska"> Nebraska</div>
+          <div class="check-item"><input type="checkbox" name="states" value="Nevada"> Nevada</div>
+          <div class="check-item"><input type="checkbox" name="states" value="New Hampshire"> New Hampshire</div>
+          <div class="check-item"><input type="checkbox" name="states" value="New Jersey"> New Jersey</div>
+          <div class="check-item"><input type="checkbox" name="states" value="New Mexico"> New Mexico</div>
+          <div class="check-item"><input type="checkbox" name="states" value="New York"> New York</div>
+          <div class="check-item"><input type="checkbox" name="states" value="North Carolina"> North Carolina</div>
+          <div class="check-item"><input type="checkbox" name="states" value="North Dakota"> North Dakota</div>
+          <div class="check-item"><input type="checkbox" name="states" value="Ohio"> Ohio</div>
+          <div class="check-item"><input type="checkbox" name="states" value="Oklahoma"> Oklahoma</div>
+          <div class="check-item"><input type="checkbox" name="states" value="Oregon"> Oregon</div>
+          <div class="check-item"><input type="checkbox" name="states" value="Pennsylvania"> Pennsylvania</div>
+          <div class="check-item"><input type="checkbox" name="states" value="Rhode Island"> Rhode Island</div>
+          <div class="check-item"><input type="checkbox" name="states" value="South Carolina"> South Carolina</div>
+          <div class="check-item"><input type="checkbox" name="states" value="South Dakota"> South Dakota</div>
+          <div class="check-item"><input type="checkbox" name="states" value="Tennessee"> Tennessee</div>
+          <div class="check-item"><input type="checkbox" name="states" value="Texas"> Texas</div>
+          <div class="check-item"><input type="checkbox" name="states" value="Utah"> Utah</div>
+          <div class="check-item"><input type="checkbox" name="states" value="Vermont"> Vermont</div>
+          <div class="check-item"><input type="checkbox" name="states" value="Virginia"> Virginia</div>
+          <div class="check-item"><input type="checkbox" name="states" value="Washington"> Washington</div>
+          <div class="check-item"><input type="checkbox" name="states" value="West Virginia"> West Virginia</div>
+          <div class="check-item"><input type="checkbox" name="states" value="Wisconsin"> Wisconsin</div>
+          <div class="check-item"><input type="checkbox" name="states" value="Wyoming"> Wyoming</div>
+          <div class="check-item"><input type="checkbox" name="states" value="District of Columbia"> Washington, D.C.</div>
+        </div>
+        <div id="state-count">0 states selected — generates instantly at 5 or fewer.</div>
       </div>
+
       <div class="field">
         <label for="companySize">Approximate number of employees</label>
-        <select id="companySize" required>
+        <select id="companySize" name="companySize" required>
           <option value="">Select a range</option>
           <option>Under 15</option>
           <option>15–49</option>
@@ -121,27 +178,23 @@
           <option>1,000+</option>
         </select>
       </div>
-      <div class="field">
-        <label>Leave types to include</label>
-        <div class="checks">
-          <div class="check-item"><input type="checkbox" value="FMLA" checked> FMLA</div>
-          <div class="check-item"><input type="checkbox" value="ADA / reasonable accommodation" checked> ADA / Accommodation</div>
-          <div class="check-item"><input type="checkbox" value="State paid family & medical leave" checked> State paid leave</div>
-          <div class="check-item"><input type="checkbox" value="Parental / bonding leave"> Parental leave</div>
-          <div class="check-item"><input type="checkbox" value="Military leave (USERRA)"> Military (USERRA)</div>
-          <div class="check-item"><input type="checkbox" value="Paid sick leave"> Paid sick leave</div>
-        </div>
-      </div>
+
       <button type="submit" class="btn" id="submit-btn">Generate policy document</button>
     </form>
 
-    <div id="result">
+    <div id="doc-result">
       <div class="doc-panel" id="doc-content"></div>
       <div class="doc-actions">
         <button class="btn btn-secondary" id="copy-btn">Copy text</button>
         <button class="btn btn-secondary" id="download-btn">Download .txt</button>
         <button class="btn btn-secondary" id="print-btn">Print / Save as PDF</button>
       </div>
+    </div>
+
+    <div id="success-panel">
+      <div class="check">✓</div>
+      <h2>Request received</h2>
+      <p>Because this covers more than 5 states, we'll personally put this policy together and email it to you within 1–2 business days, along with an offer to hop on a quick call to walk through it together.</p>
     </div>
   </div>
 </main>
@@ -151,6 +204,7 @@
   const sessionId = params.get('session_id');
   const gateNotice = document.getElementById('gate-notice');
   const form = document.getElementById('policy-form');
+  const STATE_LIMIT = 5;
 
   if (!sessionId) {
     gateNotice.innerHTML = `<div class="notice warn">
@@ -158,17 +212,67 @@
       <br><br><a href="/#products">← Back to purchase the Policy Generator</a>
     </div>`;
   } else {
-    gateNotice.innerHTML = `<div class="notice info">Payment session found. Fill out the form below to generate your document.</div>`;
+    document.getElementById('session_id_field').value = sessionId;
+    gateNotice.innerHTML = `<div class="notice info">Payment confirmed. Fill out the form below.</div>`;
     form.style.display = 'block';
   }
 
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const submitBtn = document.getElementById('submit-btn');
+  const stateCountEl = document.getElementById('state-count');
+  const submitBtn = document.getElementById('submit-btn');
+  function updateStateCount() {
+    const n = document.querySelectorAll('#state-checks input:checked').length;
+    if (n === 0) {
+      stateCountEl.textContent = '0 states selected — generates instantly at 5 or fewer.';
+      stateCountEl.classList.remove('over');
+      submitBtn.textContent = 'Generate policy document';
+    } else if (n <= STATE_LIMIT) {
+      stateCountEl.innerHTML = `<span>${n} state${n > 1 ? 's' : ''} selected</span> — this will generate instantly.`;
+      stateCountEl.classList.remove('over');
+      submitBtn.textContent = 'Generate policy document';
+    } else {
+      stateCountEl.innerHTML = `<span>${n} states selected</span> — over 5, so this becomes a reviewed request instead of instant generation.`;
+      stateCountEl.classList.add('over');
+      submitBtn.textContent = 'Submit request';
+    }
+  }
+  document.querySelectorAll('#state-checks input').forEach(cb => cb.addEventListener('change', updateStateCount));
+
+  function encode(data) {
+    return Object.keys(data).map(key => encodeURIComponent(key) + "=" + encodeURIComponent(data[key])).join("&");
+  }
+
+  function submitAsIntake(states) {
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Submitting…';
+    const formData = {
+      'form-name': 'policy-request',
+      session_id: sessionId,
+      contactEmail: document.getElementById('contactEmail').value,
+      companyName: document.getElementById('companyName').value,
+      states: states.join(', '),
+      companySize: document.getElementById('companySize').value,
+    };
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: encode(formData),
+    })
+      .then(() => {
+        form.style.display = 'none';
+        gateNotice.innerHTML = '';
+        document.getElementById('success-panel').classList.add('show');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      })
+      .catch(() => {
+        gateNotice.innerHTML = `<div class="notice warn">Something went wrong submitting your request. Please try again, or email us directly.</div>`;
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit request';
+      });
+  }
+
+  async function submitAsInstant(states) {
     submitBtn.disabled = true;
     submitBtn.innerHTML = '<span class="spinner"></span> Generating your policy…';
-
-    const leaveTypes = Array.from(document.querySelectorAll('.check-item input:checked')).map(i => i.value);
 
     try {
       const res = await fetch('/.netlify/functions/generate-policy', {
@@ -177,30 +281,53 @@
         body: JSON.stringify({
           session_id: sessionId,
           companyName: document.getElementById('companyName').value,
-          state: document.getElementById('state').value,
+          states,
           companySize: document.getElementById('companySize').value,
-          leaveTypes,
         }),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        gateNotice.innerHTML = `<div class="notice warn">${data.error || 'Something went wrong.'}</div>`;
+        // Graceful fallback: if instant generation fails (e.g. times out), offer the reviewed-request path instead
+        gateNotice.innerHTML = `<div class="notice warn">
+          ${data.error || 'Instant generation ran into a problem.'}
+          <br><br>No worries — click below and we'll build this by hand and email it to you instead.
+        </div>`;
         submitBtn.disabled = false;
-        submitBtn.textContent = 'Generate policy document';
+        submitBtn.textContent = 'Submit as a request instead';
+        submitBtn.onclick = (e) => { e.preventDefault(); submitAsIntake(states); };
         return;
       }
 
       document.getElementById('doc-content').textContent = data.document;
-      document.getElementById('result').classList.add('show');
+      document.getElementById('doc-result').classList.add('show');
       form.style.display = 'none';
       gateNotice.innerHTML = `<div class="notice info">Your policy document is ready below.</div>`;
-      document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+      document.getElementById('doc-result').scrollIntoView({ behavior: 'smooth' });
     } catch (err) {
-      gateNotice.innerHTML = `<div class="notice warn">Network error generating your document. Please try again.</div>`;
+      gateNotice.innerHTML = `<div class="notice warn">
+        This took longer than expected.
+        <br><br>No worries — click below and we'll build this by hand and email it to you instead.
+      </div>`;
       submitBtn.disabled = false;
-      submitBtn.textContent = 'Generate policy document';
+      submitBtn.textContent = 'Submit as a request instead';
+      submitBtn.onclick = (e) => { e.preventDefault(); submitAsIntake(states); };
+    }
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const states = Array.from(document.querySelectorAll('#state-checks input:checked')).map(i => i.value);
+    if (states.length === 0) {
+      gateNotice.innerHTML = `<div class="notice warn">Please check at least one state where you have employees before submitting.</div>`;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+    if (states.length <= STATE_LIMIT) {
+      submitAsInstant(states);
+    } else {
+      submitAsIntake(states);
     }
   });
 
