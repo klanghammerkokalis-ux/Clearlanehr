@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LOA Policy Generator — Clearlane HR Consulting</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  :root{
+    --navy:#0f2033;--teal:#2c6b60;--teal-bright:#3f9c86;--teal-glow:#5fc2a8;
+    --sand:#f4efe4;--paper:#fbfaf6;--ink:#122135;--ink-soft:#4c5c6e;
+    --line:#dbe1d9;--line-strong:#c3cdc4;--white:#ffffff;--red:#b3413a;
+  }
+  body{font-family:'Inter',sans-serif;background:var(--paper);color:var(--ink);line-height:1.6;min-height:100vh;}
+  h1,h2,.serif{font-family:'Fraunces',serif;}
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  a{color:var(--teal);}
+  .wrap{max-width:760px;margin:0 auto;padding:0 6vw;}
+  header{background:var(--navy);padding:26px 0;}
+  header .wrap{display:flex;align-items:center;justify-content:space-between;}
+  .logo{color:var(--white);font-family:'Fraunces',serif;font-weight:500;font-size:18px;text-decoration:none;}
+  .logo em{font-style:normal;color:var(--teal-glow);}
+  main{padding:64px 0 100px;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:14px;}
+  h1{font-size:clamp(26px,3.4vw,36px);font-weight:500;color:var(--navy);letter-spacing:-0.01em;margin-bottom:14px;line-height:1.2;}
+  .sub{color:var(--ink-soft);font-size:15.5px;margin-bottom:40px;max-width:560px;}
+
+  .card{background:var(--white);border:1px solid var(--line-strong);border-radius:8px;padding:34px;margin-bottom:24px;}
+  .field{margin-bottom:22px;}
+  label{display:block;font-size:13.5px;font-weight:600;color:var(--navy);margin-bottom:8px;}
+  input[type=text], select{
+    width:100%;padding:12px 14px;border:1px solid var(--line-strong);border-radius:4px;
+    font-family:'Inter',sans-serif;font-size:14.5px;color:var(--ink);background:var(--paper);
+  }
+  input[type=text]:focus, select:focus{outline:2px solid var(--teal-bright);outline-offset:1px;border-color:var(--teal);}
+  .checks{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .check-item{display:flex;align-items:center;gap:9px;font-size:14px;color:var(--ink);}
+  .check-item input{width:16px;height:16px;accent-color:var(--teal);}
+
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:9px;width:100%;
+    padding:15px 26px;border-radius:4px;font-size:15px;font-weight:600;border:none;cursor:pointer;
+    background:var(--navy);color:var(--white);transition:background .2s;
+  }
+  .btn:hover:not(:disabled){background:var(--teal);}
+  .btn:disabled{opacity:.55;cursor:not-allowed;}
+
+  .notice{padding:16px 18px;border-radius:6px;font-size:14px;margin-bottom:24px;}
+  .notice.warn{background:#fbeeed;border:1px solid #e3b8b3;color:var(--red);}
+  .notice.info{background:var(--sand);border:1px solid var(--line-strong);color:var(--ink-soft);}
+
+  #result{display:none;}
+  #result.show{display:block;}
+  .doc-panel{background:var(--white);border:1px solid var(--line-strong);border-radius:8px;padding:36px;white-space:pre-wrap;font-size:14.5px;line-height:1.7;color:var(--ink);max-height:70vh;overflow-y:auto;}
+  .doc-actions{display:flex;gap:12px;margin-top:18px;}
+  .btn-secondary{background:var(--paper);border:1px solid var(--line-strong);color:var(--navy);}
+  .btn-secondary:hover:not(:disabled){background:var(--sand);}
+
+  .spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.4);border-top-color:var(--white);border-radius:50%;animation:spin .7s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  @media print{
+    header,.card,.notice,.doc-actions,footer{display:none !important;}
+    #result{display:block !important;}
+    .doc-panel{border:none;max-height:none;padding:0;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a href="/" class="logo">Clear<em>lane</em> HR Consulting</a>
+    <span class="mono" style="color:#a9b7c6;font-size:11.5px;">LOA Policy Generator</span>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="eyebrow">Step 2 of 2</div>
+    <h1>Generate your leave-of-absence policy</h1>
+    <p class="sub">Fill in your company details below. It takes about a minute to generate a complete, citation-backed policy document tailored to your state.</p>
+
+    <div id="gate-notice"></div>
+
+    <form class="card" id="policy-form" style="display:none;">
+      <div class="field">
+        <label for="companyName">Company name</label>
+        <input type="text" id="companyName" required placeholder="e.g. Riverside Manufacturing Co.">
+      </div>
+      <div class="field">
+        <label for="state">Primary state of operation</label>
+        <select id="state" required>
+          <option value="">Select a state</option>
+          <option>Alabama</option><option>Alaska</option><option>Arizona</option><option>Arkansas</option>
+          <option>California</option><option>Colorado</option><option>Connecticut</option><option>Delaware</option>
+          <option>Florida</option><option>Georgia</option><option>Hawaii</option><option>Idaho</option>
+          <option>Illinois</option><option>Indiana</option><option>Iowa</option><option>Kansas</option>
+          <option>Kentucky</option><option>Louisiana</option><option>Maine</option><option>Maryland</option>
+          <option>Massachusetts</option><option>Michigan</option><option>Minnesota</option><option>Mississippi</option>
+          <option>Missouri</option><option>Montana</option><option>Nebraska</option><option>Nevada</option>
+          <option>New Hampshire</option><option>New Jersey</option><option>New Mexico</option><option>New York</option>
+          <option>North Carolina</option><option>North Dakota</option><option>Ohio</option><option>Oklahoma</option>
+          <option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option><option>South Carolina</option>
+          <option>South Dakota</option><option>Tennessee</option><option>Texas</option><option>Utah</option>
+          <option>Vermont</option><option>Virginia</option><option>Washington</option><option>West Virginia</option>
+          <option>Wisconsin</option><option>Wyoming</option><option>District of Columbia</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="companySize">Approximate number of employees</label>
+        <select id="companySize" required>
+          <option value="">Select a range</option>
+          <option>Under 15</option>
+          <option>15–49</option>
+          <option>50–99</option>
+          <option>100–249</option>
+          <option>250–999</option>
+          <option>1,000+</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Leave types to include</label>
+        <div class="checks">
+          <div class="check-item"><input type="checkbox" value="FMLA" checked> FMLA</div>
+          <div class="check-item"><input type="checkbox" value="ADA / reasonable accommodation" checked> ADA / Accommodation</div>
+          <div class="check-item"><input type="checkbox" value="State paid family & medical leave" checked> State paid leave</div>
+          <div class="check-item"><input type="checkbox" value="Parental / bonding leave"> Parental leave</div>
+          <div class="check-item"><input type="checkbox" value="Military leave (USERRA)"> Military (USERRA)</div>
+          <div class="check-item"><input type="checkbox" value="Paid sick leave"> Paid sick leave</div>
+        </div>
+      </div>
+      <button type="submit" class="btn" id="submit-btn">Generate policy document</button>
+    </form>
+
+    <div id="result">
+      <div class="doc-panel" id="doc-content"></div>
+      <div class="doc-actions">
+        <button class="btn btn-secondary" id="copy-btn">Copy text</button>
+        <button class="btn btn-secondary" id="download-btn">Download .txt</button>
+        <button class="btn btn-secondary" id="print-btn">Print / Save as PDF</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const sessionId = params.get('session_id');
+  const gateNotice = document.getElementById('gate-notice');
+  const form = document.getElementById('policy-form');
+
+  if (!sessionId) {
+    gateNotice.innerHTML = `<div class="notice warn">
+      No payment session found. This page is meant to be reached after purchasing the LOA Policy Generator.
+      <br><br><a href="/#products">← Back to purchase the Policy Generator</a>
+    </div>`;
+  } else {
+    gateNotice.innerHTML = `<div class="notice info">Payment session found. Fill out the form below to generate your document.</div>`;
+    form.style.display = 'block';
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const submitBtn = document.getElementById('submit-btn');
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span class="spinner"></span> Generating your policy…';
+
+    const leaveTypes = Array.from(document.querySelectorAll('.check-item input:checked')).map(i => i.value);
+
+    try {
+      const res = await fetch('/.netlify/functions/generate-policy', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          session_id: sessionId,
+          companyName: document.getElementById('companyName').value,
+          state: document.getElementById('state').value,
+          companySize: document.getElementById('companySize').value,
+          leaveTypes,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        gateNotice.innerHTML = `<div class="notice warn">${data.error || 'Something went wrong.'}</div>`;
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Generate policy document';
+        return;
+      }
+
+      document.getElementById('doc-content').textContent = data.document;
+      document.getElementById('result').classList.add('show');
+      form.style.display = 'none';
+      gateNotice.innerHTML = `<div class="notice info">Your policy document is ready below.</div>`;
+      document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+    } catch (err) {
+      gateNotice.innerHTML = `<div class="notice warn">Network error generating your document. Please try again.</div>`;
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Generate policy document';
+    }
+  });
+
+  document.getElementById('copy-btn').addEventListener('click', () => {
+    navigator.clipboard.writeText(document.getElementById('doc-content').textContent);
+    const btn = document.getElementById('copy-btn');
+    const orig = btn.textContent;
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = orig, 1500);
+  });
+
+  document.getElementById('download-btn').addEventListener('click', () => {
+    const text = document.getElementById('doc-content').textContent;
+    const blob = new Blob([text], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'LOA-Policy-Document.txt';
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  document.getElementById('print-btn').addEventListener('click', () => window.print());
+</script>
+
+</body>
+</html>

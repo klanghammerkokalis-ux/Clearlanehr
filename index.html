@@ -14,6 +14,7 @@
     --navy-mid:#173657;
     --teal:#2c6b60;
     --teal-bright:#3f9c86;
+    --teal-glow:#5fc2a8;
     --sand:#f4efe4;
     --paper:#fbfaf6;
     --ink:#122135;
@@ -84,10 +85,10 @@
   .hero .wrap{position:relative;z-index:2;display:grid;grid-template-columns:1.15fr .85fr;gap:64px;align-items:center;}
   .eyebrow{
     display:inline-flex;align-items:center;gap:10px;
-    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;
-    color:var(--teal-bright);margin-bottom:26px;
+    font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--teal-glow);margin-bottom:26px;
   }
-  .eyebrow::before{content:'';width:22px;height:1px;background:var(--teal-bright);}
+  .eyebrow::before{content:'';width:22px;height:1px;background:var(--teal-glow);}
   .hero h1{
     font-size:clamp(38px,4.6vw,62px);
     font-weight:500;line-height:1.06;letter-spacing:-0.015em;
@@ -113,7 +114,11 @@
     border:1px solid rgba(255,255,255,.14);border-radius:6px;
     padding:30px 28px;
   }
-  .hero-panel .mono{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--teal-bright);margin-bottom:16px;display:block;}
+  .hero-panel .mono{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--teal-glow);margin-bottom:20px;display:block;}
+  .stat-row{display:flex;gap:0;margin-bottom:22px;}
+  .stat{flex:1;padding-right:16px;}
+  .stat .num{font-family:'Fraunces',serif;font-size:38px;font-weight:600;color:var(--white);line-height:1;letter-spacing:-0.02em;}
+  .stat .label{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:#a9b7c6;margin-top:6px;}
   .credential-row{display:flex;justify-content:space-between;align-items:baseline;padding:13px 0;border-bottom:1px solid rgba(255,255,255,.1);}
   .credential-row:last-child{border-bottom:none;}
   .credential-row span:first-child{font-size:13.5px;color:#a9b7c6;}
@@ -278,8 +283,8 @@
   <div class="wrap">
     <div>
       <div class="eyebrow">Fractional HR &amp; Leave Compliance</div>
-      <h1>Every leave request has a right answer. <em>We find it before it becomes a problem.</em></h1>
-      <p class="lead">Clearlane HR designs and runs leave-of-absence programs for growing employers — FMLA, ADA, and state paid leave, built into policy your managers can actually follow, without adding headcount.</p>
+      <h1>Every leave request handled correctly. <em>Without guessing. Without legal exposure. Without slowing your managers down.</em></h1>
+      <p class="lead">We design leave programs that keep employers compliant — and easy for managers to actually run. FMLA. ADA. State paid leave. Real operational support, not a legal memo that sits on a shelf.</p>
       <div class="btn-row">
         <a href="#contact" class="btn btn-primary">Book a free 30-minute consult</a>
         <a href="#products" class="btn btn-ghost">See the LOA Policy Generator</a>
@@ -287,8 +292,11 @@
     </div>
     <div class="hero-panel">
       <span class="mono">Founder credentials</span>
+      <div class="stat-row">
+        <div class="stat"><div class="num">8,500+</div><div class="label">Employees Supported</div></div>
+        <div class="stat"><div class="num">50</div><div class="label">States</div></div>
+      </div>
       <div class="credential-row"><span>Certification</span><span>SHRM-CP · PMP</span></div>
-      <div class="credential-row"><span>LOA program scale</span><span>8,500+ employees, 50 states</span></div>
       <div class="credential-row"><span>Background</span><span>Former classroom teacher</span></div>
     </div>
   </div>
@@ -377,7 +385,7 @@
         <div class="ptag">Instant · State-specific</div>
         <h3>LOA Policy Generator</h3>
         <p>Answer a few questions about your company — state, size, leave types offered — and get a complete, compliance-ready leave policy document in minutes, citing FMLA, ADA, USERRA, and your state's paid-leave law.</p>
-        <div class="price-row"><span class="price">$47</span><a href="#contact" class="price-link">Get started →</a></div>
+        <div class="price-row"><span class="price">$47</span><a href="https://buy.stripe.com/3cIaEPdwhgQB7Hxf4n08g00" target="_blank" rel="noopener" class="price-link">Get started →</a></div>
       </div>
       <div class="product-card">
         <div class="ptag">Digital bundle</div>
